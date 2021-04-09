@@ -29,10 +29,9 @@ class App extends React.Component {
     }
     getCityInfo = async (e) => {
         e.preventDefault();
-        console.log('searched', this.state.citySearchedFor);
 
+        try{
         let locationResponseData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_CITY_KEY}&q=${this.state.citySearchedFor}&format=json`);
-        console.log(locationResponseData.data[0]);
 
         this.setState({
             haveWeSearchedYet: true,
@@ -41,8 +40,10 @@ class App extends React.Component {
             cityLat: locationResponseData.data[0].lat,
             cityLon: locationResponseData.data[0].lon,
             cityMapSrc: `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_KEY}&center=${locationResponseData.data[0].lat},${locationResponseData.data[0].lon}&zoom=10`
-        });
-        console.log('cityLat', this.state.cityName);
+            });
+        } catch (err) {
+            this.setState({error: `${err.message}: ${err.response.data.error}`});
+        }
     }
     render() {
         return (
@@ -65,6 +66,9 @@ class App extends React.Component {
                                     Latitude: {this.state.cityLat}
                                     <br></br>
                                      Longitude: {this.state.cityLon}
+                                </p>
+                                <p>
+                                    ${this.state.error}
                                 </p>
                             </Card.Text>
                         </Card.Body>
