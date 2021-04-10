@@ -42,6 +42,7 @@ class App extends React.Component {
             cityMapSrc: `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_KEY}&center=${locationResponseData.data[0].lat},${locationResponseData.data[0].lon}&zoom=10`
             });
         } catch (err) {
+            console.log('we found an error')
             this.setState({error: `${err.message}: ${err.response.data.error}`});
         }
     }
@@ -53,6 +54,11 @@ class App extends React.Component {
                     <input type="text" name='citySearchedFor' onChange={(e) => this.handleChange(e)} placeholder="Search City, State" />
                     <button type="submit">Explore!</button>
                 </form>
+                {this.state.error ? 
+                    <Card>
+                        <Card.Body>{this.state.error} : {this.state.error}</Card.Body>
+                    </Card> :
+                    ''}    
                 {this.state.haveWeSearchedYet ?
                     <Card className="card" style={{ width: '30rem' }}
                         bg="primary"
@@ -62,14 +68,11 @@ class App extends React.Component {
                         <Card.Body>
                             <Card.Title>{this.state.cityName}</Card.Title>
                             <Card.Text>
-                                <p>
+                                <>
                                     Latitude: {this.state.cityLat}
                                     <br></br>
                                      Longitude: {this.state.cityLon}
-                                </p>
-                                <p>
-                                    ${this.state.error}
-                                </p>
+                                </>
                             </Card.Text>
                         </Card.Body>
                     </Card> : <br></br>}
