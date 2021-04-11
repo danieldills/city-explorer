@@ -12,3 +12,13 @@ button {
 div {
     text-align: center;
 }
+
+.map {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body {
+    background-color: lightcyan;
+}

@@ -55,12 +55,12 @@ class App extends React.Component {
                     <button type="submit">Explore!</button>
                 </form>
                 {this.state.error ? 
-                    <Card>
+                    <Card className="map">
                         <Card.Body>{this.state.error} : {this.state.error}</Card.Body>
                     </Card> :
                     ''}    
                 {this.state.haveWeSearchedYet ?
-                    <Card className="card" style={{ width: '30rem' }}
+                    <Card className="map" style={{ width: '30rem' }}
                         bg="primary"
                         text="light"
                         >
