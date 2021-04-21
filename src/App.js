@@ -40,14 +40,21 @@ class App extends React.Component {
         cityLon: locationResponseData.data[0].lon,
         cityMapSrc: `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_KEY}&center=${locationResponseData.data[0].lat},${locationResponseData.data[0].lon}&zoom=10`
       });
+      this.getWeatherData();
     } catch (err) {
       this.setState({ error: `${err.message}` });
     }
-    this.getWeatherData();
+    
   }
   getWeatherData = async () => {
     try {
-      const weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`)
+      console.log('Hello, weather!')
+      const weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`, 
+      {params: {
+        lat: this.state.cityLat,
+        lon: this.state.cityLon
+      }});
+      console.log(weatherData.data);
       this.setState({
         weatherData: weatherData.data
       })
@@ -81,7 +88,7 @@ class App extends React.Component {
                     <>
                       Latitude: {this.state.cityLat}
                       <br></br>
-                                Longitude: {this.state.cityLon}
+                      Longitude: {this.state.cityLon}
                     </>
                   </Card.Text>
                 </Card.Body>
