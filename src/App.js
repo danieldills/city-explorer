@@ -4,6 +4,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import Weather from './Weather';
+import Movies from './Movies';
 import './style.css';
 import axios from 'axios';
 
@@ -14,8 +15,9 @@ class App extends React.Component {
 
     this.state = {
       haveWeSearchedYet: false,
-      citySearchedFor: React.createRef(),
-      weatherData: []
+      citySearchedFor: '',
+      weatherData: [],
+      movieData: []
     };
   }
 
@@ -28,7 +30,6 @@ class App extends React.Component {
   }
   getCityInfo = async (e) => {
     e.preventDefault();
-
     try {
       let locationResponseData = await axios.get(`https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_CITY_KEY}&q=${this.state.citySearchedFor}&format=json`);
 
@@ -41,6 +42,7 @@ class App extends React.Component {
         cityMapSrc: `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_CITY_KEY}&center=${locationResponseData.data[0].lat},${locationResponseData.data[0].lon}&zoom=10`
       });
       this.getWeatherData();
+      this.getMovieData();
     } catch (err) {
       this.setState({ error: `${err.message}` });
     }
@@ -48,7 +50,6 @@ class App extends React.Component {
   }
   getWeatherData = async () => {
     try {
-      console.log('Hello, weather!')
       const weatherData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/weather`, 
       {params: {
         lat: this.state.cityLat,
@@ -62,6 +63,20 @@ class App extends React.Component {
       this.setState({ error: `${err.message}` });
     }
   }
+getMovieData = async () => {
+  try {
+  let movieData = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/movies`,
+    {params: {
+      city: this.state.citySearchedFor
+    }});
+    this.setState({
+      movieData: movieData.data,
+    }); 
+  } catch (err) {
+    this.setState({error: `${err.message}`});
+  }
+};
+
   render() {
     return (
       <>
@@ -93,7 +108,8 @@ class App extends React.Component {
                   </Card.Text>
                 </Card.Body>
               </Card>
-              <Weather weatherData={this.state.weatherData} error={this.state.error} />
+              <Weather weatherData={this.state.weatherData} error={this.state.error}/>
+              <Movies movieData={this.state.movieData} error={this.state.error}/>
             </>
             : ''}
         </div>
