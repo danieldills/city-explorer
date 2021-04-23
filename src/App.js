@@ -3,8 +3,9 @@ import './App.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
-import Weather from './Weather';
-import Movies from './Movies';
+import Weather from './WeatherComponent/Weather';
+import Movies from './MovieComponent/Movies';
+
 import './style.css';
 import axios from 'axios';
 
